@@ -2,44 +2,58 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Able Player Audio Demo #4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Audio in "Lyrics Mode" | Able Player Demos</title>
 <link rel="stylesheet" href="demos.css" type="text/css">
 
 <!-- Dependencies -->
-<script src="../thirdparty/modernizr.custom.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../thirdparty/js.cookie.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 
 <!-- Able Player CSS -->
 <link rel="stylesheet" href="../build/ableplayer.min.css" type="text/css"/>
 
 <!-- Able Player JavaScript -->
-<script src="../build/ableplayer.js"></script>
+<script src="../build/ableplayer.dist.js"></script>
 
 </head>
 
 <body>
+	<header>
+		<div class="title">Able Player Demos</div>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="index.html">More demos</a></li>
+			<li><a href="https://ableplayer.github.io/ableplayer">Able Player Home</a></li>
+		</ul>
+	</nav>
+	<main>
+		<h1>Audio in "Lyrics Mode"</h1>
 
-<h1>Able Player Audio Demo #4:<br/>Audio player with interactive transcript in "Lyrics Mode"</h1>
+		<p>All tracks are supported in Able Player for both video and audio, with the exception of
+			descriptions. This example includes captions, subtitles, and chapters tracks.
+		</p>
+		<p>The transcript (in this case, song lyrics) is provided in a captions file (in French)
+			and a subtitles file (in English). Since the song is in French, the French subtitles
+			are set as the default track with the <code>default</code> attribute.
+			The following optional attributes affect the transcript:
+		</p>
+		<ul>
+			<li><code>data-lyrics-mode</code> - forces a line break between and within captions in the transcript</li>
+			<li><code>data-transcript-title</code> - to override default title, which is "Transcript", or "Lyrics" if the data-lyrics-mode attribute is present</li>
+		</ul>
 
-<p>The transcript (in this case, song lyrics) is provided in
-  a WebVTT file with kind="captions" and linked using a &lt;track&gt; element, just as with video.
-  The captions are currently rendered as a transcript only, not as captions.
-  Note the two additional optional attributes that are relevant for this example:
-</p>
-<ul>
-  <li><strong>data-lyrics-mode</strong> - forces a line break between and within captions in the transcript</li>
-  <li><strong>data-transcript-title</strong> - to override default title, which is "Transcript", or "Lyrics" if the data-lyrics-mode attribute is present</li>
-</ul>
-
-<p>For additional demos see the <a href="index.html">Index of <em>Able Player</em> Examples</a>.</p>
-
-<!-- use the following markup for each media element -->
-<audio id="audio1" width="480" class="ump-media" preload="auto" data-able-player data-lyrics-mode data-transcript-title="Sing along!">
-  <source type="audio/mpeg" src="../media/paulallen.mp3"/>
-  <source type="audio/ogg" src="../media/paulallen.ogg"/>
-  <track kind="captions" src="../media/paulallen_en.vtt" srclang="en" label="English"/>
-</audio>
-
+		<div id="wrapper">
+			<!-- use the following markup for each media element -->
+			<audio id="audio1" preload="auto" data-able-player data-lyrics-mode data-transcript-title="Sing along!">
+				<source type="audio/mpeg" src="../media/frenchsong.mp3"/>
+				<source type="audio/ogg" src="../media/frenchsong.ogg"/>
+				<track kind="captions" src="../media/frenchsong_captions_fr.vtt" srclang="fr" label="Français" default/>
+				<track kind="subtitles" src="../media/frenchsong_captions_en.vtt" srclang="en" label="English"/>
+				<track kind="chapters" src="../media/frenchsong_chapters_fr.vtt" srclang="fr" label="Français"/>
+				<track kind="chapters" src="../media/frenchsong_chapters_en.vtt" srclang="en" label="English"/>
+			</audio>
+		</div>
+</main>
 </body>
 </html>

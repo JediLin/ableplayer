@@ -2,33 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Able Player Audio Demo #1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Audio with One Track | Able Player Demos</title>
 <link rel="stylesheet" href="demos.css" type="text/css">
 
 <!-- Dependencies -->
-<script src="../thirdparty/modernizr.custom.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="../thirdparty/js.cookie.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 
 <!-- Able Player CSS -->
 <link rel="stylesheet" href="../build/ableplayer.min.css" type="text/css"/>
 
 <!-- Able Player JavaScript -->
-<script src="../build/ableplayer.js"></script>
+<script src="../build/ableplayer.dist.js"></script>
 
 </head>
 
 <body>
+	<header>
+		<div class="title">Able Player Demos</div>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="index.html">More demos</a></li>
+			<li><a href="https://ableplayer.github.io/ableplayer">Able Player Home</a></li>
+		</ul>
+	</nav>
+	<main>
+		<h1>Audio with One Track</h1>
 
-<h1>Able Player Audio Demo #1:<br/>Audio player with one track</h1>
-
-<p>For additional demos see the <a href="index.html">Index of <em>Able Player</em> Examples</a>.</p>
-
-<audio id="audio1" width="480" preload="auto" data-able-player>
-  <source type="audio/mpeg" src="../media/smallf.mp3"/>
-  <source type="audio/ogg" src="../media/smallf.ogg"/>
-</audio>
-
-</div>
+		<div id="wrapper">
+			<audio id="audio1" preload="auto" data-able-player>
+				<source type="audio/mpeg" src="../media/smallf.mp3"/>
+				<source type="audio/ogg" src="../media/smallf.ogg"/>
+			</audio>
+		</div>
+	</main>
 </body>
 </html>

@@ -1,65 +1,76 @@
 (function ($) {
   AblePlayer.prototype.updateMeta = function (time) {
     if (this.hasMeta) {
-      if (this.metaType === 'text') {
+      if (this.metaType === "text") {
         this.$metaDiv.show();
-        this.showMeta(time || this.getElapsed());
-      }
-      else {
-        this.showMeta(time || this.getElapsed());
+        this.showMeta(time || this.elapsed);
+      } else {
+        this.showMeta(time || this.elapsed);
       }
     }
   };
 
-  AblePlayer.prototype.showMeta = function(now) {
-    var tempSelectors, m, thisMeta,
-      cues, cueText, cueLines, i, line,
-      showDuration, focusTarget;
+  AblePlayer.prototype.showMeta = function (now) {
+    var tempSelectors,
+      m,
+      thisMeta,
+      cues,
+      cueText,
+      cueLines,
+      i,
+      line,
+      showDuration,
+      focusTarget;
 
     tempSelectors = [];
     if (this.meta.length >= 1) {
       cues = this.meta;
-    }
-    else {
+    } else {
       cues = [];
     }
     for (m = 0; m < cues.length; m++) {
-      if ((cues[m].start <= now) && (cues[m].end > now)) {
+      if (cues[m].start <= now && cues[m].end > now) {
         thisMeta = m;
         break;
       }
     }
-    if (typeof thisMeta !== 'undefined') {
+    if (typeof thisMeta !== "undefined") {
       if (this.currentMeta !== thisMeta) {
-        if (this.metaType === 'text') {
+        if (this.metaType === "text") {
           // it's time to load the new metadata cue into the container div
-          this.$metaDiv.html(this.flattenCueForMeta(cues[thisMeta]).replace('\n', '<br>'));
-        }
-        else if (this.metaType === 'selector') {
+          this.$metaDiv.html(
+            this.flattenCueForMeta(cues[thisMeta]).replace(/\n/g, "<br>")
+          );
+        } else if (this.metaType === "selector") {
           // it's time to show content referenced by the designated selector(s)
           cueText = this.flattenCueForMeta(cues[thisMeta]);
-          cueLines = cueText.split('\n');
-          for (i=0; i<cueLines.length; i++) {
-            line = $.trim(cueLines[i]);
-            if (line.toLowerCase().trim() === 'pause') {
+          cueLines = cueText.split("\n");
+          for (i = 0; i < cueLines.length; i++) {
+            line = cueLines[i].trim();
+            if (line.toLowerCase().trim() === "pause") {
               // don't show big play button when pausing via metadata
               this.hideBigPlayButton = true;
               this.pauseMedia();
-            }
-            else if (line.toLowerCase().substring(0,6) == 'focus:') {
+            } else if (line.toLowerCase().substring(0, 6) == "focus:") {
               focusTarget = line.substring(6).trim();
               if ($(focusTarget).length) {
-                $(focusTarget).focus();
+                $(focusTarget).trigger('focus');
               }
-            }
-            else {
+            } else {
               if ($(line).length) {
                 // selector exists
-                showDuration = parseInt($(line).attr('data-duration'));
-                if (typeof showDuration !== 'undefined' && !isNaN(showDuration)) {
-                  $(line).show().delay(showDuration).fadeOut();
-                }
-                else {
+                this.currentMeta = thisMeta;
+                showDuration = parseInt($(line).attr("data-duration"));
+                if (
+                  typeof showDuration !== "undefined" &&
+                  !isNaN(showDuration)
+                ) {
+					$(line).show();
+					const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+					delay(showDuration).then(() => {
+						$(line).hide();
+					});
+                } else {
                   // no duration specified. Just show the element until end time specified in VTT file
                   $(line).show();
                 }
@@ -72,26 +83,23 @@
           // now step through this.visibleSelectors and remove anything that's stale
           if (this.visibleSelectors && this.visibleSelectors.length) {
             if (this.visibleSelectors.length !== tempSelectors.length) {
-              for (i=this.visibleSelectors.length-1; i>=0; i--) {
-                if ($.inArray(this.visibleSelectors[i],tempSelectors) == -1) {
+              for (i = this.visibleSelectors.length - 1; i >= 0; i--) {
+                if ($.inArray(this.visibleSelectors[i], tempSelectors) == -1) {
                   $(this.visibleSelectors[i]).hide();
-                  this.visibleSelectors.splice(i,1);
+                  this.visibleSelectors.splice(i, 1);
                 }
               }
             }
           }
-
         }
-        this.currentMeta = thisMeta;
       }
-    }
-    else {
+    } else {
       // there is currently no metadata. Empty stale content
-      if (typeof this.$metaDiv !== 'undefined') {
-        this.$metaDiv.html('');
+      if (typeof this.$metaDiv !== "undefined") {
+        this.$metaDiv.html("");
       }
       if (this.visibleSelectors && this.visibleSelectors.length) {
-        for (i=0; i<this.visibleSelectors.length; i++) {
+        for (i = 0; i < this.visibleSelectors.length; i++) {
           $(this.visibleSelectors[i]).hide();
         }
         // reset array
@@ -106,29 +114,27 @@
     var result = [];
 
     var flattenComponent = function (component) {
-      var result = [], ii;
-      if (component.type === 'string') {
+      var result = [],
+        ii;
+      if (component.type === "string") {
         result.push(component.value);
-      }
-      else if (component.type === 'v') {
-        result.push('[' + component.value + ']');
+      } else if (component.type === "v") {
+        result.push("[" + component.value + "]");
+        for (ii = 0; ii < component.children.length; ii++) {
+          result.push(flattenComponent(component.children[ii]));
+        }
+      } else {
         for (ii = 0; ii < component.children.length; ii++) {
           result.push(flattenComponent(component.children[ii]));
         }
       }
-      else {
-        for (ii = 0; ii < component.children.length; ii++) {
-          result.push(flattenComponent(component.children[ii]));
-        }
-      }
-      return result.join('');
-    }
+      return result.join("");
+    };
 
     for (var ii = 0; ii < cue.components.children.length; ii++) {
       result.push(flattenComponent(cue.components.children[ii]));
     }
 
-    return result.join('');
+    return result.join("");
   };
-
 })(jQuery);

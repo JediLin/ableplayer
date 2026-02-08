@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Audio player with Metadata track (type = text) | Able Player Demos</title>
+<link rel="stylesheet" href="demos.css" type="text/css">
+
+<!-- Dependencies -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+<!-- Able Player CSS -->
+<link rel="stylesheet" href="../build/ableplayer.min.css" type="text/css"/>
+
+<!-- Able Player JavaScript -->
+<script src="../build/ableplayer.dist.js"></script>
+
+<!-- CSS for this example -->
+<style>
+	#meta {
+		clear: both;
+		width: 480px;
+		color: #C00;
+		font-weight: bold;
+		font-size: 1.2em;
+		margin: 1em;
+		display: none;
+	}
+</style>
+</head>
+
+<body>
+	<header>
+		<div class="title">Able Player Demos</div>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="index.html">More demos</a></li>
+			<li><a href="https://ableplayer.github.io/ableplayer">Able Player Home</a></li>
+		</ul>
+	</nav>
+	<main>
+		<h1>Audio player with Metadata track (type = text)</h1>
+
+		<div id="wrapper">
+			<p>Time-synced metadata is provided in a WebVTT file with kind="metadata".
+				A <code>data-meta-type</code> attribute has value "text",
+				which is one of two types of supported metadata tracks
+				(the other is "selector"). With "text" as the metadata type,
+				the text contained in the WebVTT file is displayed in an
+				external container at the designated times during playback.
+				The ID of the external container is provided in a
+				<code>data-meta-div</code> attribute.
+			</p>
+
+			<audio id="audio1" preload="auto" data-able-player data-meta-type="text" data-meta-div="meta">
+				<source type="audio/mpeg" src="../media/paulallen.mp3"/>
+				<source type="audio/ogg" src="../media/paulallen.ogg"/>
+				<track kind="metadata" src="../media/paulallen_meta.vtt"/>
+			</audio>
+
+			<div id="meta" role="alert"></div>
+		</div>
+	</main>
+</body>
+</html>
